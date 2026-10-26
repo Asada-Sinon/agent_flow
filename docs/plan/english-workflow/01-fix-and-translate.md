@@ -2,7 +2,7 @@
 
 > Task record: goals, authorization, repository addresses, and environment details apply only to this task. When copied to another project, this is an example, not authorization or requirements for that project.
 
-**status**: in-progress
+**status**: done
 **Source**: [English workflow and recovery fixes](../../spec/english-workflow/spec.md#acceptance-criteria), AC-01 through AC-05.
 
 ## Goal and acceptance
@@ -13,7 +13,7 @@ Implement the approved fixes and English migration. Verify creation recovery, ex
 
 - [x] Translate current instructions and templates; fix creation and TODO rules.
 - [x] Translate historical records without changing evidence; update checker expectations and recovery cases.
-- [ ] Verify, record results, commit, push, and compare main with the remote.
+- [x] Verify, record results, commit, push, and compare main with the remote.
 
 ## Verification results
 
@@ -26,6 +26,6 @@ Implement the approved fixes and English migration. Verify creation recovery, ex
 - README and checker both document their example coupling. Migration instructions identify the English headings/fields and unchanged paths/statuses/command. The 1.0.0 increment follows the existing rule for incompatible document conventions; no performance gain is claimed.
 - `git diff --check` passed. Fetching origin/main showed no divergence before publication.
 
-## Next step
+## Delivery result
 
-Commit, push, compare local and remote main, then record completion.
+Published version 1.0.0 to main of `Asada-Sinon/agent_flow`. Implementation commit `21d6df75fd3167d213d950b1029076db9ee687cf` matched remote main after pushing, with a clean worktree. This completion record follows in a documentation-only commit without a version increment.
