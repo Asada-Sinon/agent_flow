@@ -7,6 +7,7 @@ throwaway directory, so review changes to those commands before running.
 """
 
 from datetime import date
+import os
 from pathlib import Path
 import re
 import shutil
@@ -67,8 +68,8 @@ def check_documents():
 
 def check_templates():
     required = {
-        "docs/spec/_template.md": ["## 一句话目标", "## 范围", "## 非目标", "## 验收标准", "**AC-01**"],
-        "docs/plan/_template.md": ["**status**: pending", "**来源**:", "## 目标与验收", "## 步骤", "- [ ]", "## 验证结果"],
+        "docs/spec/_template.md": ["## Goal", "## Scope", "## Non-goals", "## Acceptance criteria", "**AC-01**"],
+        "docs/plan/_template.md": ["**status**: pending", "**Source**:", "## Goal and acceptance", "## Steps", "- [ ]", "## Verification results"],
     }
     for name, fields in required.items():
         text = prose((ROOT / name).read_text(encoding="utf-8"))
@@ -99,9 +100,9 @@ def check_version_and_inbox():
     require(len(releases) == len(set(releases)), "Duplicate version in CHANGELOG.md")
     inbox = prose((ROOT / "docs/TODO.md").read_text(encoding="utf-8"))
     sections = re.findall(r"^## (.+)$", inbox, re.M)
-    for section in ("待办", "最近处理结果"):
+    for section in ("Pending", "Latest result"):
         require(sections.count(section) == 1, f"docs/TODO.md must contain one {section} section")
-    require(sections.index("待办") < sections.index("最近处理结果"), "TODO results must follow pending tasks")
+    require(sections.index("Pending") < sections.index("Latest result"), "TODO results must follow pending tasks")
     print(f"Version and inbox: PASS ({version}; changelog aligned; TODO sections present)")
 
 
@@ -113,9 +114,11 @@ def run_example(block, workspace):
 
 
 def check_examples():
+    # Coupled to README's three Getting started blocks, sample slug/paths,
+    # and recovery messages. Update both files when changing those examples.
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    section = re.search(r"^## 开始使用\s*\n(.*?)(?=^## |\Z)", readme, re.M | re.S)
-    require(section is not None, "README is missing the 开始使用 section")
+    section = re.search(r"^## Getting started\s*\n(.*?)(?=^## |\Z)", readme, re.M | re.S)
+    require(section is not None, "README is missing the Getting started section")
     blocks = re.findall(r"^```bash\n(.*?)^```", section.group(1), re.M | re.S)
     require(len(blocks) == 3, "Expected directory, plan and spec creation examples in README")
     expected = [
@@ -137,6 +140,45 @@ def check_examples():
                         "Directory example did not create the expected directories")
                 continue
             target = workspace / relative
+            source_file = workspace / source
+            source_bytes = source_file.read_bytes()
+            source_mode = source_file.stat().st_mode
+            target.unlink()
+            for failure in ("missing", "not-a-file", "unreadable"):
+                if failure == "missing":
+                    source_file.unlink()
+                elif failure == "not-a-file":
+                    source_file.unlink()
+                    source_file.mkdir()
+                else:
+                    source_file.chmod(0)
+                try:
+                    if failure == "unreadable" and os.access(source_file, os.R_OK):
+                        print(f"SKIP: unreadable-source case for {relative} (process can read mode-000 files)")
+                        continue
+                    result = run_example(block, workspace)
+                    require(result.returncode != 0, f"Invalid source must fail ({failure}): {relative}")
+                    require(not target.exists(), f"Failed creation left a target ({failure}): {relative}")
+                    require("Template is not a readable file" in result.stderr,
+                            f"Missing source diagnostic ({failure}): {relative}")
+                finally:
+                    if failure == "not-a-file":
+                        source_file.rmdir()
+                    elif failure == "unreadable":
+                        source_file.chmod(source_mode)
+                    source_file.write_bytes(source_bytes)
+                    source_file.chmod(source_mode)
+                result = run_example(block, workspace)
+                require(result.returncode == 0 and target.read_bytes() == source_bytes,
+                        f"Cannot retry after source recovery ({failure}): {relative}")
+                target.unlink()
+            with tempfile.TemporaryDirectory(prefix="flow-wrong-cwd-") as wrong_directory:
+                result = run_example(block, wrong_directory)
+                require(result.returncode != 0, f"Wrong working directory must fail: {relative}")
+                require(not (Path(wrong_directory) / relative).exists(),
+                        f"Wrong working directory left a target: {relative}")
+            result = run_example(block, workspace)
+            require(result.returncode == 0, f"Final creation failed: {relative}")
             require(target.is_file(), f"README example {number} did not create {relative}")
             require(target.read_bytes() == (ROOT / source).read_bytes(), f"Template copy differs: {relative}")
             for original in (b"Saved task progress\n", b""):
@@ -144,9 +186,9 @@ def check_examples():
                 result = run_example(block, workspace)
                 require(result.returncode != 0, f"Repeated example must fail: {relative}")
                 require(target.read_bytes() == original, f"Existing file overwritten: {relative}")
-                require("继续已有任务" in result.stderr and "slug" in result.stderr,
+                require("resume the existing task" in result.stderr and "slug" in result.stderr,
                         f"Missing recovery instructions for existing file: {relative}")
-    print("README examples: PASS (3 examples; plan/spec reject existing populated and empty files)")
+    print("README examples: PASS (3 examples; source failure/recovery, wrong directory, existing populated/empty targets)")
 
 
 def main():

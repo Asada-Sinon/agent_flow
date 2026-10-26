@@ -1,35 +1,37 @@
-# 以 agent 效率为优先的工作流
+# A workflow that prioritizes agent efficiency
 
-> 任务记录：目标、授权、仓库地址及环境信息仅适用于本任务；复制到新项目时仅作示例，不构成新项目的需求或操作授权。
+> Task record: goals, authorization, repository addresses, and environment details apply only to this task. When copied to another project, this is an example, not authorization or requirements for that project.
+>
+> Historical translation: dates, acceptance IDs, decisions, and evidence describe the original task, not new verification.
 
-## 一句话目标
+## Goal
 
-减少流程、重复读取和重复探索的成本，同时保留验收与可接续记录，并将模板发布到用户指定的 `Asada-Sinon/agent_flow` 仓库。
+Reduce process overhead, repeated reading, and repeated investigation while retaining acceptance and handoff records, then publish the template to the user's `Asada-Sinon/agent_flow` repository.
 
-## 范围
+## Scope
 
-- 按不确定性、影响和接续需求选择流程，局部明确修改不强制落盘计划。
-- 按需读取，在阶段检查点记录重要调整，简化模板，允许一次性诊断脚本。
-- README 集中提供采用方式、环境和分层验证入口；旧示例标明历史版本。
-- 初始化 Git，将验证后的文件提交到 `Asada-Sinon/agent_flow` 空仓库。
+- Choose workflows by uncertainty, impact, and continuity needs; do not require file plans for clear local changes.
+- Read on demand, record important changes at milestones, simplify templates, and allow one-off diagnostic scripts.
+- Put adoption guidance, environment information, and layered verification entry points in README; mark old examples as historical.
+- Initialize Git and commit verified files to the empty `Asada-Sinon/agent_flow` repository.
 
-## 非目标
+## Non-goals
 
-- 不引入业务运行时、自动化框架、额外工具依赖或强制多 agent 流程。
-- 不重写历史验证结果，不提交本地数据、日志、临时文件或凭据。
-- 不覆盖远端已有历史。
+- No application runtime, automation framework, extra tooling dependency, or mandatory multi-agent workflow.
+- No rewriting historical verification results or committing local data, logs, temporary files, or credentials.
+- No overwriting remote history.
 
-## 约束与假设
+## Constraints and assumptions
 
-- 用户已批准上一轮审阅的六项建议，以及初始化 Git 和上传仓库。
-- 流程效率尚无实际任务对照测量，不宣称量化提升。
-- 初始环境的 Git 写入和网络限制曾阻塞发布，GitHub 连接写入也曾返回 403；2026-10-26 用户切换为允许文件写入和联网的环境后继续，改用本地 Git 和已有 HTTPS 认证发布。
+- The user approved the six review suggestions and Git initialization/upload.
+- No comparative task benchmark was performed; do not claim quantified efficiency gains.
+- Initial Git write/network restrictions blocked publication, and the GitHub connector returned 403 on writes. On 2026-10-26 the user switched to an environment allowing filesystem writes and networking; publication continued through local Git and existing HTTPS authentication.
 
-## 验收标准
+## Acceptance criteria
 
-- **AC-01**：局部明确修改可直接执行；多步骤或跨会话任务使用 plan；重要行为或接口变化、需澄清的复杂需求使用 spec + plan。代码、脚本、配置、文档均按影响判断。
-- **AC-02**：读取限定于当前任务；常规调试无需逐次更新；阶段检查点保存重要进展，恢复时核对文件现状。
-- **AC-03**：plan 默认保留目标、状态、步骤和验证结果，可选内容为空时省略；接续记录支持入口、排除方案和下一步命令；未验收不得标记 done。
-- **AC-04**：README 链接统一规约、模板和当前示例，提供环境、最小验证、完整验证触发条件与外部依赖的填写入口；允许无副作用的一次性诊断脚本，不无故重复验证。
-- **AC-05**：本地链接、使用示例和相关忽略规则检查通过；历史示例明确不是当前规范。
-- **AC-06**：远端分支包含全部交付文件且内容核对一致；本地 Git 初始化完成。受限制的部分保持未完成，并记录阻塞及恢复步骤。
+- **AC-01**: Clear local changes run directly; multi-step or cross-session tasks use a plan; significant interface/behavior changes or complex requirements needing clarification use spec + plan. Classify code, scripts, configuration, and documents by impact.
+- **AC-02**: Read only current-task context; routine debugging needs no per-attempt update; save important progress at milestones and check files when resuming.
+- **AC-03**: Default plan content is goal, status, steps, and results; omit empty optional content. Support entry points, rejected approaches, and next commands. Unaccepted work cannot be done.
+- **AC-04**: README links the shared rules, templates, and examples, and provides environment, focused verification, full-check triggers, and external-dependency fields. Permit one-off diagnostics without extra side effects and avoid unjustified repeated checks.
+- **AC-05**: Local links, usage examples, and relevant ignore checks pass; historical examples are clearly not current policy.
+- **AC-06**: The remote branch contains all deliverables with matching content, and local Git is initialized. Restricted portions remain unfinished with blockers and recovery steps recorded.

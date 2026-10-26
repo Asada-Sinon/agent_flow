@@ -1,34 +1,36 @@
-# 初始化并发布仓库
+# Initialize and publish the repository
 
-> 任务记录：目标、授权、仓库地址及环境信息仅适用于本任务；复制到新项目时仅作示例，不构成新项目的需求或操作授权。
+> Task record: goals, authorization, repository addresses, and environment details apply only to this task. When copied to another project, this is an example, not authorization or requirements for that project.
+>
+> Historical translation: the evidence below describes the original run, not a new verification run.
 
 **status**: done
-**来源**: [以 agent 效率为优先的工作流](../../spec/agent-efficiency/spec.md#验收标准)，AC-06。
+**Source**: [Agent efficiency workflow](../../spec/agent-efficiency/spec.md#acceptance-criteria), AC-06.
 
-## 目标与验收
+## Goal and acceptance
 
-将验证后的交付文件保存到 `Asada-Sinon/agent_flow` 空仓库，并初始化本地 Git；核对远端分支和文件内容。
+Publish verified deliverables to the empty `Asada-Sinon/agent_flow` repository, initialize local Git, and verify the remote branch and contents.
 
-## 步骤
+## Steps
 
-- [x] 确认目标仓库和空仓库状态。
-- [x] 准备并验证 11 个待发布文件。
-- [x] 初始化本地 Git 并连接远端。
-- [x] 提交并发布交付文件。
-- [x] 核对远端分支和文件内容，记录结果。
+- [x] Confirm the repository and empty remote state.
+- [x] Prepare and verify 11 deliverable files.
+- [x] Initialize local Git and connect the remote.
+- [x] Commit and publish deliverables.
+- [x] Verify the remote branch and contents, and record results.
 
-## 验证结果
+## Verification results
 
-2026-10-26 完成发布，AC-06 通过。
+Publication completed on 2026-10-26; AC-06 passed.
 
-- 用户更正并确认的目标为 `https://github.com/Asada-Sinon/agent_flow`。发布前 `git ls-remote` 成功且返回空，确认未覆盖已有历史。
-- 在工作区执行 `git init -b main`，添加上述 HTTPS origin；使用现有 Asada-Sinon 认证，未新增凭据或修改全局认证配置。
-- 暂存并提交 11 个文件：根目录规约、README、.gitignore 以及 docs 中的规格和计划。本地数据、日志、临时脚本及配置未入库。
-- `git diff --cached --check` 通过；首次提交为 `f34dbc3df71930852413c6193f549f96729816a0`，提交信息为 `Add agent-efficient development workflow`。
-- `git push -u origin main` 成功创建远端 main，并设置上游跟踪。
-- 发布后实际核对：`git rev-parse HEAD` 与 `git ls-remote origin refs/heads/main` 的提交 SHA 一致，`git status --porcelain` 为空，`git ls-files` 为 11 个文件。提交一致性同时确认了远端文件树与本地提交内容一致。
-- 本记录随独立文档提交同步至远端；主流程与模板验证结果见 [实施计划](01-simplify-workflow.md)。
+- The user corrected and confirmed `https://github.com/Asada-Sinon/agent_flow`. Before publication, `git ls-remote` succeeded with empty output, confirming no existing history would be overwritten.
+- Ran `git init -b main` in the workspace and added that HTTPS origin. Used existing Asada-Sinon authentication without adding credentials or changing global authentication configuration.
+- Staged and committed 11 files: root rules, README, .gitignore, and specs/plans under docs. Local data, logs, temporary scripts, and configuration were excluded.
+- `git diff --cached --check` passed. The initial commit was `f34dbc3df71930852413c6193f549f96729816a0`, with message `Add agent-efficient development workflow`.
+- `git push -u origin main` created remote main and configured upstream tracking.
+- After publication, `git rev-parse HEAD` matched `git ls-remote origin refs/heads/main`; `git status --porcelain` was empty and `git ls-files` contained 11 files. Matching commits also confirmed matching file trees.
+- This record was synchronized in a separate documentation commit. Workflow/template evidence is in the [implementation plan](01-simplify-workflow.md).
 
-## 重要调整
+## Important adjustments
 
-初始环境的 `.git` 只读、终端网络受限，GitHub 连接创建文件返回 403，曾使发布阻塞。用户切换为允许文件写入和联网的环境后要求继续，2026-10-26 通过本地 Git 成功完成发布。只确认当前环境限制已解除，未修改或声称验证了未来会话的永久权限设置。
+Initially, `.git` was read-only, terminal networking was restricted, and connector writes returned 403. After the user switched to an environment allowing filesystem writes and networking, local Git publication succeeded on 2026-10-26. Only the current environment was confirmed unblocked; permanent permissions for future sessions were neither changed nor claimed as verified.

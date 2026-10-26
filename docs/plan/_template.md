@@ -1,31 +1,32 @@
-# <计划标题>
+# <Plan title>
 
 **status**: pending
-**来源**: <用户请求摘要，或 ../../spec/<slug>/spec.md#验收标准 的链接>
+**Source**: <user request summary, or a link to ../../spec/<slug>/spec.md#acceptance-criteria>
 
 <!--
-仅在任务需要持久计划时使用，复制到 docs/plan/<slug>/NN-<step>.md。
-通用规约见仓库根目录 AGENTS.md。
-状态：pending | in-progress | blocked | done | cancelled。
-按需添加接续信息、重要调整或阻塞章节，无内容则省略。
+Use only when a persistent plan is needed; copy to docs/plan/<slug>/NN-<step>.md.
+Shared rules are in the repository-root AGENTS.md.
+Statuses: pending | in-progress | blocked | done | cancelled.
+Add handoff, important decisions, or blockers only when needed; omit empty sections.
 -->
 
-## 目标与验收
+## Goal and acceptance
 
-<!-- 有 spec 时引用验收编号；否则写可验证的目标。简述验证命令或观察方法及通过条件。 -->
+<!-- Reference spec IDs if available; otherwise state verifiable goals. Include verification methods and passing conditions. -->
 
-## 步骤
+## Steps
 
-- [ ] <一个可完成的步骤>
+- [ ] <a completable step>
 
-## 验证结果
+## Verification results
 
-尚未执行验证。
+Not yet verified.
 
 <!--
-记录实际检查、结果及未完成验证，对应验收全部通过且留有证据后才能标记 done。
-阶段完成后更新进度与下一步，不记录每次调试。
-需要跨会话接续时添加：相关文件入口、已排除方案及原因、下一步动作或命令。
-任务取消时记录原因及替代任务（如有），使用 cancelled，不代表验收通过。
-发生阻塞时添加：原因、解除条件和下一步。重要调整只记决策及原因。
+Record actual checks, results, and remaining verification. Mark done only when all relevant criteria pass with evidence.
+Update progress and the next step at milestones, not after every debugging attempt.
+For handoff, include file entry points, rejected approaches and reasons, and the next action or command.
+For cancellation, record the reason and replacement task if any; use cancelled, not done.
+Mark any retained associated inbox entry "Do not execute: cancelled" so it is not picked up again.
+For blockers, record the cause, unblock condition, and next step. Record important decisions with their reasons.
 -->

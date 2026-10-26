@@ -1,34 +1,36 @@
-# 修复模板采用与验证问题
+# Fix template adoption and verification
 
-> 任务记录：目标、授权、仓库地址及环境信息仅适用于本任务；复制到新项目时仅作示例，不构成新项目的需求或操作授权。
+> Task record: goals, authorization, repository addresses, and environment details apply only to this task. When copied to another project, this is an example, not authorization or requirements for that project.
+>
+> Historical translation: the evidence below describes the original run, not a new verification run.
 
 **status**: done
-**来源**: 用户要求落实审阅建议并上传到现有仓库。
+**Source**: The user requested implementation of the review suggestions and upload to the existing repository.
 
-## 目标与验收
+## Goal and acceptance
 
-- README 模板创建示例首次执行成功；重复执行非零退出并提示继续已有任务或换 slug，原内容不变。
-- `python3 script/check_workflow.py` 使用标准库检查本地链接、锚点、模板字段和 README 创建示例；验证失败时非零退出。
-- README 提供采用清单与检查命令；所有任务示例说明历史目标与授权不适用于新项目，原始证据保留。
-- 规约和 plan 模板支持 cancelled，要求记录取消原因及替代任务（如有）。独立审查保持按需选项，不增加强制阶段。
-- 提交并推送至 main，核对本地与远端提交一致。
+- README creation examples succeed initially, reject repeated execution with a recovery message, and preserve existing contents.
+- `python3 script/check_workflow.py` uses the standard library to check local links, anchors, template fields, and README creation examples; failures exit nonzero.
+- README provides adoption/check instructions; task records scope historical goals and authorization to their original task and preserve evidence.
+- Rules and the plan template support cancelled with a reason and replacement task if any. Independent review remains optional.
+- Commit and push main, then compare local and remote commits.
 
-## 步骤
+## Steps
 
-- [x] 修改创建示例、采用清单、任务说明及状态定义。
-- [x] 将检查逻辑整理为入库脚本，验证正常流程及故障检出能力。
-- [x] 记录证据，提交并推送，核对远端。
+- [x] Update creation examples, adoption guidance, task notices, and statuses.
+- [x] Retain the checker and verify normal behavior plus fault detection.
+- [x] Record evidence, commit, push, and verify the remote.
 
-## 验证结果
+## Verification results
 
-- `python3 script/check_workflow.py` 通过：11 个 Markdown 文件、24 个本地链接、4 个锚点、模板关键字段及 5 种状态。
-- README 的 3 个创建示例通过；plan 和 spec 首次创建内容与模板一致，已有非空文件及空文件时均非零退出、显示恢复提示且原内容保持不变。
-- 在临时副本中分别注入失效链接、失效锚点、缺失模板字段、移除防覆盖选项四类故障，检查脚本均以退出码 1 检出并输出对应诊断。
-- 从 `/tmp` 通过绝对路径运行脚本通过，入口不依赖调用者工作目录。
-- 6 份任务记录均包含授权边界说明；与 Git 中原版本对照，5 份既有记录除新增说明外原文完整保留。
-- 审阅确认采用清单要求清理模板任务并修复示例链接；cancelled 区别于 done，独立审查仅为按需选项。
-- `git diff --check` 通过；推送前 fetch 确认本地与 origin/main 无分叉。
+- `python3 script/check_workflow.py` passed: 11 Markdown files, 24 local links, 4 anchors, required template fields, and 5 statuses.
+- All 3 README examples passed. Initial plan/spec copies matched their templates; existing populated and empty targets caused nonzero exits, recovery messages, and unchanged contents.
+- Temporary copies with a broken link, broken anchor, missing template field, or removed overwrite protection each exited 1 with the corresponding diagnostic.
+- Running by absolute path from `/tmp` passed; invocation did not depend on the caller's working directory.
+- All 6 task records included authorization-scope notices. Comparing against Git showed the 5 previous records were unchanged apart from those notices.
+- Review confirmed adoption guidance removes template task records and fixes links, cancelled differs from done, and independent review is optional.
+- `git diff --check` passed; a pre-push fetch showed no local/remote divergence.
 
-## 发布结果
+## Publication result
 
-已推送至 `Asada-Sinon/agent_flow` 的 main 分支。修复提交为 `8149a51f535fe728f97c128427fadf5377eaac59`；推送后实际核对本地 HEAD 与远端 main SHA 一致，工作区干净。本完成记录随后以独立文档提交同步。
+Published to main of `Asada-Sinon/agent_flow`. The implementation commit was `8149a51f535fe728f97c128427fadf5377eaac59`; after pushing, local HEAD matched remote main and the worktree was clean. This completion record followed in a separate documentation commit.

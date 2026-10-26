@@ -1,29 +1,31 @@
-# 加入版本号和用户待办
+# Add versioning and a user inbox
 
-> 任务记录：目标、授权、仓库地址及环境信息仅适用于本任务；复制到新项目时仅作示例，不构成新项目的需求或操作授权。
+> Task record: goals, authorization, repository addresses, and environment details apply only to this task. When copied to another project, this is an example, not authorization or requirements for that project.
+>
+> Historical translation: the evidence below describes the original run, not a new verification run.
 
 **status**: done
-**来源**: [版本规则与文件待办入口](../../spec/version-and-inbox/spec.md#验收标准)，AC-01 至 AC-05。
+**Source**: [Versioning and task inbox](../../spec/version-and-inbox/spec.md#acceptance-criteria), AC-01 through AC-05.
 
-## 目标与验收
+## Goal and acceptance
 
-建立轻量版本规则及 docs/TODO.md 输入入口。通过检查脚本、故障注入和待办场景走查验收，不添加后台进程。
+Establish lightweight version rules and docs/TODO.md. Verify through the checker, fault injection, and inbox-scenario review, without a background process.
 
-## 步骤
+## Steps
 
-- [x] 加入 VERSION、CHANGELOG、TODO，更新规约和 README。
-- [x] 扩展检查脚本并验证版本、入口及原有检查。
-- [x] 走查待办执行和清理场景，记录证据，提交并推送。
+- [x] Add VERSION, CHANGELOG, and TODO; update shared rules and README.
+- [x] Extend the checker and verify version, inbox, and existing behavior.
+- [x] Review execution/cleanup scenarios, record evidence, commit, and push.
 
-## 验证结果
+## Verification results
 
-- `python3 script/check_workflow.py` 通过：15 个 Markdown 文件、35 个本地链接、8 个锚点，模板字段和 5 种状态通过，版本 0.1.0 与变更记录一致，待办区域存在；原有 3 个 README 创建示例及重复执行保护通过。
-- 临时副本故障注入：版本含前导零、VERSION 与 CHANGELOG 不一致、非法日期、缺失待办区域、缺失结果区域，5 类情况均非零退出并给出对应诊断。
-- 临时副本写入明确需求、暂不执行备忘和待确认条目后，从 `/tmp` 运行检查仍通过，TODO 字节内容不变；检查脚本不会代替 agent 执行或清理需求。
-- 流程走查（规则审阅，非后台运行测试）：明确条目按任务分级推进；关键歧义保留问题；仅调查请求不扩展到待办；完成且原文未变才清理；失败或部分完成保留；用户新增、改写及无法唯一定位的条目保留；空待办不处理示例；恢复时先核对实际产物避免重复工作。
-- 版本场景走查：不兼容变化升主版本，兼容功能升次版本，修复升修订号；同批按最高级别升一次，单纯回执或发布证据不升级。本次首次建立 0.1.0，不追补旧版本，不自动创建标签。
-- `git diff --check` 通过；fetch 后本地与 origin/main 无分叉。
+- `python3 script/check_workflow.py` passed: 15 Markdown files, 35 local links, 8 anchors, template fields, and 5 statuses. Version 0.1.0 matched the changelog, inbox sections existed, and the 3 existing README examples and repeated-execution protection passed.
+- 5 temporary-copy faults exited nonzero with relevant diagnostics: a leading-zero version, VERSION/changelog mismatch, invalid date, missing pending section, and missing result section.
+- A temporary inbox containing an actionable request, a do-not-execute note, and a clarification-needed entry passed checks invoked from `/tmp`; its bytes stayed unchanged. The checker does not execute or clear requests for the agent.
+- Rule review, not a background runtime test: clear tasks follow classification; ambiguities stay with questions; investigation-only requests do not expand scope; only completed unchanged entries are cleared; failures and partial work remain; new/edited/ambiguous entries stay; empty inboxes do not activate examples; resumption checks actual outputs before repeating work.
+- Version review: incompatible changes increment major, compatible features minor, fixes patch; one increment per batch at the highest level, none for receipts/publication evidence alone. This first release used 0.1.0 without backfilled releases or automatic tags.
+- `git diff --check` passed; fetching showed no divergence from origin/main.
 
-## 交付结果
+## Delivery result
 
-版本 0.1.0 已推送至 `Asada-Sinon/agent_flow` 的 main。实现提交 `6a40b3e2646534bbef3542cafb52c2590608f99c` 的本地 HEAD 与远端 main SHA 一致，工作区干净。完成记录随后以独立文档提交同步，不升级版本。
+Version 0.1.0 was pushed to main of `Asada-Sinon/agent_flow`. Implementation commit `6a40b3e2646534bbef3542cafb52c2590608f99c` matched remote main and the worktree was clean. The completion record followed in a documentation commit without a version increment.

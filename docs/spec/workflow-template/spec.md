@@ -1,53 +1,53 @@
-# 工作流模板精简与补全
+# Simplify and complete the workflow template
 
-> 任务记录：目标、授权、仓库地址及环境信息仅适用于本任务；复制到新项目时仅作示例，不构成新项目的需求或操作授权。
+> Task record: goals, authorization, repository addresses, and environment details apply only to this task. When copied to another project, this is an example, not authorization or requirements for that project.
+>
+> Historical translation: this preserves the original requirements and evidence, not a new verification run. Small-change planning and recording rules have since been superseded by [AGENTS.md](../../../AGENTS.md) and the [efficiency spec](../../spec/agent-efficiency/spec.md).
 
-> 历史记录：本文件保留当时的要求与验证结果；小修改计划、记录时机等规则已由当前 [AGENTS.md](../../../AGENTS.md) 及 [效率调整规格](../../spec/agent-efficiency/spec.md) 更新，不作为现行规范。
+## Goal
 
-## 一句话目标
+Let flow choose a workflow by task size and support future development with resumable plans and real verification evidence.
 
-让 flow 按任务规模选择流程，并用可接续的计划与真实验证记录支撑后续项目开发。
+## Background
 
-## 背景与动机
+Earlier rules required a full spec and plan for every code change, with confirmation for each plan adjustment. Model signatures and log snapshots added maintenance cost. A spec template existed, but plan templates, handoff guidance, and complete examples were missing.
 
-原有规则要求所有代码操作先走完整 spec 和 plan，计划调整也必须逐次确认；文件内模型署名和日志快照增加了维护成本。仓库已有 spec 模板，但缺少 plan 模板、交接格式和完整使用示例。
+## Scope
 
-## 范围
+- Centralize rules in AGENTS.md, with CLAUDE.md importing them.
+- Separate investigation, small changes, and complete features; allow implementation adjustments within approved goals.
+- Complete spec/plan templates, acceptance IDs, verification evidence, and handoff guidance.
+- Write results directly into plans; remove mandatory model signatures, log snapshots, and duplicate document indexes.
+- Update directories, ignore rules, and adoption instructions.
+- Use this actual task's spec and plan as the full example.
 
-- 将通用规约集中到 AGENTS.md，CLAUDE.md 作为工具入口引用。
-- 区分调查、小修改和完整功能，允许在已确认目标内调整实现。
-- 补全 spec、plan 模板，统一验收编号、验证证据和中断交接。
-- 结果直接写回 plan，取消强制模型署名、日志快照和重复的文档索引。
-- 更新目录、忽略规则及新项目采用模板的说明。
-- 用本次修改的真实 spec 和 plan 展示完整流程。
+## Non-goals
 
-## 非目标
+- No business code, framework, dependency, or automation script.
+- No Git initialization or commits in the working directory for this task.
+- No pre-created application sources, fixtures, or deliverables; only define their locations.
 
-- 不引入业务代码、技术框架、依赖或自动化脚本。
-- 不初始化当前工作目录的 Git，不创建提交。
-- 不预先创建业务源码、测试样例和交付物；只约定需要时的存放位置。
+## Constraints and assumptions
 
-## 约束与假设
+- Initially there were only instructions, one spec template, ignore rules, and an empty log placeholder.
+- Small changes still required a short saved plan; documentation-only changes did not require a separate plan under these historical rules.
+- data, log, output, and temp were local directories; versioned fixtures and deliverables used separate locations.
+- The user accepted the review suggestions and explicitly requested the full implementation.
 
-- 调整前只有说明文档、一个 spec 模板、忽略规则及空的日志占位文件。
-- 小修改仍保存简短 plan，纯文档调整无需单独建计划。
-- data、log、output、temp 是本地工作目录；需版本管理的样例和交付文档使用独立位置。
-- 用户已认可审阅建议，并明确要求实施完整方案。
+## Acceptance criteria
 
-## 验收标准
+- **AC-01**: Maintain one set of shared rules; CLAUDE.md reads AGENTS.md, and README links rules, templates, and real examples.
+- **AC-02**: Define investigation, small changes, full features, plan adjustments, and interruption recovery without unrelated repeated confirmation.
+- **AC-03**: Specs retain non-goals and numbered criteria; plans support source, steps, verification methods, actual results, changes, blockers, and next steps. Unverified work cannot be done.
+- **AC-04**: Store evidence in plans; remove mandatory signatures, log snapshots, duplicate indexes, placeholders, and stale references.
+- **AC-05**: Ignore local data, outputs, logs, temporary files, environment configuration, dependencies, and caches while permitting rules, templates, environment examples, fixtures, and deliverables.
+- **AC-06**: README covers local directory creation and environment/install/run/check/source setup; records contain only checks actually performed and their results.
 
-- **AC-01**：通用规则只维护一份；CLAUDE.md 明确读取 AGENTS.md，README 能找到规约、模板和真实示例。
-- **AC-02**：阅读排查、小修改、完整功能、计划调整和执行中断五种场景都有明确处理方式，不要求无关的反复确认。
-- **AC-03**：spec 保留非目标和编号验收项；plan 支持来源、步骤、验证方法、实际结果、变更、阻塞及下一步，未验证不能标记 done。
-- **AC-04**：完成证据写回 plan；强制文件署名、日志快照和重复索引已取消，相关占位文件及失效引用已清理。
-- **AC-05**：Git 忽略本地数据、产物、日志、临时文件、环境配置、依赖和缓存，同时允许规约、模板、环境示例、测试样例及交付文档入库。
-- **AC-06**：README 提供空目录准备方式及环境、安装、运行、验证、源码位置的填写入口；本次记录只包含实际执行过的验证及其结果。
+## Open questions
 
-## 待确认事项
+None. Record new issues affecting goals, scope, or acceptance in the plan and handle them under the shared rules.
 
-无。实施中发现影响目标、范围或验收的新问题时，在计划中记录并按通用规约处理。
+## Decisions
 
-## 澄清记录
-
-- 用户认同项目审阅建议，并要求开始修改；规划阶段将具体范围落实为方案后，用户要求实施该方案。
-- 默认小修改也落盘简短计划，结果写回计划，示例采用本次真实改动，不编造业务实现或验证结果。
+- The user accepted the review, requested changes, then requested implementation of the resulting plan.
+- Small changes would save a short plan by default; results would stay in plans. The example would document this real task, without fabricated implementation or verification.

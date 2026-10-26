@@ -1,29 +1,31 @@
-# 精简工作流并验证
+# Simplify and verify the workflow
 
-> 任务记录：目标、授权、仓库地址及环境信息仅适用于本任务；复制到新项目时仅作示例，不构成新项目的需求或操作授权。
+> Task record: goals, authorization, repository addresses, and environment details apply only to this task. When copied to another project, this is an example, not authorization or requirements for that project.
+>
+> Historical translation: the evidence below describes the original run, not a new verification run.
 
 **status**: done
-**来源**: [以 agent 效率为优先的工作流](../../spec/agent-efficiency/spec.md#验收标准)，AC-01 至 AC-05。
+**Source**: [Agent efficiency workflow](../../spec/agent-efficiency/spec.md#acceptance-criteria), AC-01 through AC-05.
 
-## 目标与验收
+## Goal and acceptance
 
-落实已批准的六项建议，保留真实验证和任务接续能力。通过规则场景走查、本地链接检查、README 示例执行和忽略规则检查验收。
+Implement the six approved suggestions while preserving real verification and continuity. Accept through rule-scenario review, local-link checks, README example execution, and ignore-rule checks.
 
-## 步骤
+## Steps
 
-- [x] 精简 AGENTS、README 和两个模板，标注历史示例。
-- [x] 检查文档链接、README 示例、忽略规则及典型流程场景。
-- [x] 将结果写回本计划，交付文件进入发布步骤。
+- [x] Simplify AGENTS, README, and both templates; mark historical examples.
+- [x] Check links, README examples, ignore rules, and representative workflows.
+- [x] Record results and pass deliverables to publication.
 
-## 验证结果
+## Verification results
 
-- 本地一次性脚本 `python3 temp/check_workflow.py` 检查通过：10 个 Markdown 文件、22 个本地链接、4 个锚点，无行尾空白。脚本属于临时诊断产物，不入库。
-- 在独立临时目录执行 README 的 3 段 shell 示例，工作目录创建正常，复制的 2 个模板与源文件完全一致。
-- 在临时 Git 仓库检查忽略规则：11 个本地数据、环境及缓存路径被忽略，18 个文档、样例、脚本、锁文件和配置示例路径可入库。
-- 场景走查通过：局部配置修复直接验证；多步骤任务保存 plan；重要接口变更使用 spec + plan；修改规约按影响判断；诊断脚本可在 temp 中直接运行；常规调试不逐次更新计划；关键阶段保存接续信息；未通过验收不能标记 done。
-- README 不再复述完整流程和状态规范，改为链接 AGENTS；两个模板删除强制空章节；历史示例保留原始证据并标注已被现行规则替代。
-- 当前没有业务应用或测试，不声称运行过业务测试，也未进行效率对照测量。
+- The one-off local `python3 temp/check_workflow.py` passed: 10 Markdown files, 22 local links, 4 anchors, and no trailing whitespace. The diagnostic script was not versioned at that time.
+- Executed 3 README shell blocks in a separate temporary directory; work directories were created and 2 copied templates exactly matched their sources.
+- In a temporary Git repository, 11 local-data/environment/cache paths were ignored and 18 document/fixture/script/lockfile/environment-example paths were eligible for version control.
+- Scenario review passed: direct verification for local configuration fixes; plans for multi-step tasks; spec + plan for significant interfaces; impact-based classification of rule edits; direct diagnostics in temp; no per-attempt debugging logs; milestone handoffs; no done status before acceptance.
+- README links AGENTS rather than repeating complete workflow/status definitions. Templates omit mandatory empty sections; historical examples preserve evidence and identify superseded rules.
+- No business application or tests existed. No business tests or comparative efficiency benchmark were claimed.
 
-## 重要调整
+## Important adjustments
 
-用户更正仓库名为 `agent_flow`；已确认正确地址为 `https://github.com/Asada-Sinon/agent_flow`。发布详情单独记录在 [发布计划](02-publish-repository.md)。
+The user corrected the repository name to `agent_flow`; the verified address was `https://github.com/Asada-Sinon/agent_flow`. Publication is recorded in the [publication plan](02-publish-repository.md).

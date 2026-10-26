@@ -1,25 +1,29 @@
-# 用户待办
+# User inbox
 
-把新要求或想法写在下面的「待办」区域，普通文字或 `- [ ]` 列表都可以，一项写一个目标；不必在对话里重复输入。
+Write requests or ideas in `Pending` below, as plain text or a `- [ ]` list, one goal per entry. Use your preferred language; there is no need to repeat requests in chat.
 
-Agent 开始任务时会读取这里，也可以直接告诉它「处理待办」。仅编辑文件不会启动 agent 或后台执行。明确的需求会按项目规约处理；影响目标或验收的问题会先询问，并在条目旁保留说明。只想备忘的内容请标注「暂不执行」。
+The agent reads this file when starting work, or when asked to "process the inbox." Editing it does not start an agent or background job. Clear requests follow the project workflow. Questions affecting goals or acceptance are recorded beside the entry for clarification. Mark reference-only notes `Do not execute`.
 
-完成并验证后，agent 只移除本轮处理且原文未变的条目，更新「最近处理结果」；未完成、新增或执行期间被改写的内容会保留。完整规则见 [待办入口](../AGENTS.md#待办入口)。
+Retained cancelled or replaced tasks are marked `Do not execute: cancelled` and skipped until you explicitly reactivate them. Manually checked `[x]` or `[X]` entries are treated as your completed records and skipped, not counted as agent-verified work. Cancelled and checked records are removed only if you explicitly request removal.
 
-写法示例（不是实际待办）：
+After completion and verification, the agent removes only processed entries whose original text has not changed, then updates `Latest result`. Unfinished, newly added, or edited entries remain. See the [inbox rules](../AGENTS.md#task-inbox).
+
+Examples only; these are not actual requests:
 
 ```markdown
-- [ ] 给导出功能增加 CSV 格式，文件名带日期。
-- [ ] 修复设置页保存后提示不消失的问题。
-- 暂不执行：考虑增加深色模式。
+- [ ] Add CSV export with a date in the filename.
+- [ ] Fix the settings page notification that remains after saving.
+- Do not execute: consider a dark theme.
+- Do not execute: cancelled — replace the old export task with the CSV request.
+- [x] A task I completed myself; no agent verification is claimed.
 ```
 
-## 待办
+## Pending
 
-<!-- 在这里添加需求；清理时保留本标题和提示。 -->
+<!-- Add requests here. Preserve this heading and note when clearing completed entries. -->
 
-## 最近处理结果
+## Latest result
 
-尚未处理待办。
+No inbox tasks have been processed.
 
-<!-- Agent 每轮处理后替换本区：日期、完成摘要、验证结果、剩余问题；有 plan 时附链接。这里只保留最近一轮回执。 -->
+<!-- Replace after each processing batch: date, completed work, verification, remaining issues, and an existing plan link if applicable. Keep only the latest receipt. -->

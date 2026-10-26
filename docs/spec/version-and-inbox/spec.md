@@ -1,34 +1,36 @@
-# 版本规则与文件待办入口
+# Versioning and a file-based task inbox
 
-> 任务记录：目标、授权、仓库地址及环境信息仅适用于本任务；复制到新项目时仅作示例，不构成新项目的需求或操作授权。
+> Task record: goals, authorization, repository addresses, and environment details apply only to this task. When copied to another project, this is an example, not authorization or requirements for that project.
+>
+> Historical translation: dates, acceptance IDs, decisions, and evidence describe the original task, not new verification.
 
-## 一句话目标
+## Goal
 
-为模板建立明确的版本号，并允许用户在 Markdown 中写需求，由 agent 在会话中执行、验证并清理完成条目。
+Introduce an explicit template version and let users write Markdown requests for an agent to execute, verify, and clear during a session.
 
-## 范围
+## Scope
 
-- 根目录 VERSION 保存版本号，CHANGELOG.md 记录交付变化，规约定义升级时机。
-- docs/TODO.md 作为用户输入入口；规约说明读取、排序、澄清、完成清理及结果回执。
-- 更新 README 和检查脚本，检查版本格式、变更记录一致性与待办入口结构。
+- Store the version in root VERSION, delivered changes in CHANGELOG.md, and increment rules in the shared conventions.
+- Use docs/TODO.md for requests, with rules for reading, priority, clarification, completion cleanup, and receipts.
+- Update README and the checker for version format, changelog consistency, and inbox structure.
 
-## 非目标
+## Non-goals
 
-- 不引入后台监听、定时任务、自动调用模型或额外依赖。
-- 不将自然语言待办实现为脚本自动执行器，不机械解析任意 Markdown 后删除内容。
-- 不把模板历史授权继承到新项目，不自动创建 GitHub Release。
+- No background watcher, scheduled task, automatic model invocation, or new dependency.
+- No script-based natural-language executor or mechanical deletion of arbitrary Markdown.
+- No inheritance of historical template authorization and no automatic GitHub Release.
 
-## 约束与假设
+## Constraints and assumptions
 
-- 这是首次引入版本号，从 0.1.0 开始，不为旧提交追补版本。
-- 沿用已有仓库交付方式，验证后提交并推送 main；不自动创建版本标签。
-- 待办在 agent 开始任务或用户要求处理时读取；单独编辑文件不会启动会话。
-- 最近处理结果保留一份简短回执，不保留已完成条目的原始正文；详细证据复用已有 plan，轻量任务无需额外计划。
+- This task first introduced versions, starting at 0.1.0 without backfilling old commits.
+- Continue the established delivery process: verify, commit, and push main; no automatic version tags.
+- Read the inbox when an agent starts work or is asked to process it; editing the file alone does not start a session.
+- Retain one short latest-result receipt rather than completed request bodies. Reuse existing plans for detailed evidence; small tasks still need no extra plan.
 
-## 验收标准
+## Acceptance criteria
 
-- **AC-01**：VERSION 为 0.1.0，CHANGELOG 有对应日期和变更；主/次/修订升级及不升级场景可明确判定。
-- **AC-02**：用户可在 docs/TODO.md 的待办区写自然语言或勾选条目，无需在对话中复述；入口说明会话触发边界，README 和 AGENTS 可定位入口。
-- **AC-03**：明确需求可执行，草稿想法和关键歧义保留并记录问题；本轮用户明确限制范围时不执行无关待办。
-- **AC-04**：只有完成并验证且原文未被用户改写的条目可移除；失败、阻塞、部分完成、新增及改写条目保留，清理前重新读取文件并保留结果回执。
-- **AC-05**：检查脚本检出无效版本、版本与变更记录不一致、缺失待办区域，且原有文档和创建保护检查通过。
+- **AC-01**: VERSION is 0.1.0 for this delivery, with a corresponding dated changelog entry and clear major/minor/patch and no-increment cases.
+- **AC-02**: Users can write plain text or checkbox requests in docs/TODO.md without repeating them in chat; explain session triggering and link the entry from README and AGENTS.
+- **AC-03**: Execute clear requests; retain incomplete ideas or key ambiguities with questions. Do not execute unrelated inbox items when the current user limits scope.
+- **AC-04**: Remove only completed, verified entries unchanged by the user. Retain failed, blocked, partial, new, or edited entries; reread before cleanup and leave a receipt.
+- **AC-05**: The checker detects invalid versions, changelog mismatches, and missing inbox sections; existing document and creation-protection checks pass.

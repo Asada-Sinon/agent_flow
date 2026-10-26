@@ -1,30 +1,31 @@
-# <需求标题>
+# <Requirement title>
 
 <!--
-仅在任务需要需求规格时使用，复制到 docs/spec/<slug>/spec.md。
-通用规约见仓库根目录 AGENTS.md。
-保留目标、范围、非目标和编号验收项；背景、约束与假设、待确认事项及澄清记录按需添加，空章节直接省略。
-先解决影响目标、范围或验收的关键问题，再开展依赖该决定的工作。
+Use only when a spec is needed; copy to docs/spec/<slug>/spec.md.
+Shared rules are in the repository-root AGENTS.md.
+Keep the goal, scope, non-goals, and numbered acceptance criteria. Add background,
+constraints, assumptions, open questions, and decisions only when relevant.
+Resolve key goal/scope/acceptance questions before dependent work.
 -->
 
-## 一句话目标
+## Goal
 
-<!-- 要达成的具体结果；必要时补充当前行为及动机。 -->
+<!-- State the concrete outcome; add current behavior and motivation if useful. -->
 
-## 范围
+## Scope
 
-<!-- 本次要做的事。 -->
+<!-- What this task will do. -->
 
-## 非目标
+## Non-goals
 
-<!-- 明确本次不做的事，防止扩大范围。 -->
+<!-- What this task will not do, to prevent unintended scope growth. -->
 
-## 验收标准
+## Acceptance criteria
 
 <!--
-使用稳定编号，新增时追加；plan 引用编号，不复制需求全文。
-写成可判定真假的行为描述，并能通过具体命令或观察验证。
-例如：给定不存在的文件路径，以退出码 2 结束，并向 stderr 输出错误信息。
+Use stable IDs and append new ones. Plans reference IDs instead of copying requirements.
+State observable behavior that can be verified with a command or observation.
+Example: a nonexistent input path exits with code 2 and writes an error to stderr.
 -->
 
-- **AC-01**：<行为、触发条件和可观察的预期结果>
+- **AC-01**: <behavior, trigger, and observable expected result>

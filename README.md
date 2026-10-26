@@ -1,104 +1,120 @@
 # flow
 
-面向 agent 开发的可复用工作流模板。以完成并验证任务的总成本为优先：简单任务直接推进，复杂任务保留必要的计划和验收，长任务留下可接续的进度。
+A reusable workflow template for agent-assisted development. Optimize the total cost of completing and verifying work: act directly on simple tasks, keep plans and acceptance criteria for complex work, and leave useful handoff notes for long tasks.
 
-通用规则统一维护在 [AGENTS.md](AGENTS.md)，Claude Code 通过 [CLAUDE.md](CLAUDE.md) 引入。开始任务时只读取当前工作需要的内容。
+Shared rules live in [AGENTS.md](AGENTS.md); Claude Code imports them through [CLAUDE.md](CLAUDE.md). Read only what the current task needs.
 
-当前版本见 [VERSION](VERSION)，更新内容见 [CHANGELOG.md](CHANGELOG.md)，采用 `主版本.次版本.修订号`，具体规则见 [版本管理](AGENTS.md#版本管理)。
+See [VERSION](VERSION) for the current `MAJOR.MINOR.PATCH` version, [CHANGELOG.md](CHANGELOG.md) for changes, and [Versioning](AGENTS.md#versioning) for increment rules.
 
-## 写需求给 agent
+## Write requests for an agent
 
-直接在 [docs/TODO.md](docs/TODO.md) 的「待办」区域写要求或想法，支持普通文字和勾选列表，不必再在对话里复述。Agent 开始任务时读取，也可以用一句「处理待办」启动处理；仅保存文件不会自动启动后台任务。
+Add requests or ideas to `Pending` in [docs/TODO.md](docs/TODO.md), using plain text or checkboxes. You need not repeat them in chat. The agent reads them when starting work; you can also say "process the inbox." Saving the file alone does not start background work.
 
-完成并验证的条目会被清理，文件保留最近处理结果；失败、待确认或执行期间被你改写的条目继续保留。只作备忘的想法标注「暂不执行」。当前对话明确限定范围时，agent 不会顺带执行其他待办。
+Completed, verified entries are removed, leaving a short receipt. Failed, unclear, or user-edited entries stay. Mark notes `Do not execute`; retained cancelled/replaced entries use `Do not execute: cancelled` and remain inactive until explicitly reactivated. User-checked `[x]`/`[X]` entries are skipped as user-marked records, not agent-verified results. Current chat instructions can limit which tasks are handled. Requests may be written in your preferred language.
 
-## 开始使用
+## Getting started
 
-采用到新项目时：
+When adopting this template:
 
-1. 填写下方项目目标、环境、运行和验证命令，补充技术栈的忽略规则。
-2. 删除 `docs/spec/`、`docs/plan/` 中模板自身的任务目录（保留 `_template.md`），并移除 README 中对应的示例链接；如需保留，移到明确的示例目录并修复相对链接。所有保留记录中的目标、授权、仓库地址和环境信息只属于当时的任务，不适用于新项目。
-3. 为新项目重置 VERSION、CHANGELOG 和 TODO 的模板回执，保留版本规则与待办入口结构；不要将模板版本历史当作新项目发布历史。
-4. 在 docs/TODO.md 或对话中提出新项目自己的首个任务，仅在需要时创建 spec 或 plan。
+1. Fill in the project goal, environment, run commands, and verification commands below; update ignore rules for the chosen stack.
+2. Remove the template's task directories under `docs/spec/` and `docs/plan/` while keeping `_template.md`, and remove their README example links. Alternatively, move retained records into an explicit examples directory and fix relative links. Their goals, authorization, repository addresses, and environment details belong only to the original tasks.
+3. Reset VERSION, CHANGELOG, and the template's TODO receipt for the new project, preserving the version rules and inbox structure. Do not inherit template releases as project releases.
+4. Start the project's first real task through TODO or chat; create a spec or plan only when needed.
 
-本地工作目录按需创建：
+Create local work directories as needed:
 
 ```bash
 mkdir -p data log output temp script
 ```
 
-按 [任务分级](AGENTS.md#开始任务) 选择流程。局部明确修改无需文件计划；需要持久计划时使用以下示例。`refactor-import` 是示例任务名，请替换为实际 slug；目标文件已存在时停止，继续已有任务或换用新 slug：
+Choose a workflow using [task classification](AGENTS.md#starting-a-task). Clear local changes need no file plan. When a persistent plan is needed, run this example from the repository root. Replace the example slug `refactor-import` and step name with your actual task. An existing target causes a failure: resume that task or choose a new slug.
 
 ```bash
 (
 set -eu
 task_slug=refactor-import
+source_template=docs/plan/_template.md
 target="docs/plan/$task_slug/01-refactor-import.md"
+if [ ! -f "$source_template" ] || [ ! -r "$source_template" ]; then
+  printf 'Template is not a readable file: %s. Run from the repository root.\n' "$source_template" >&2
+  exit 1
+fi
 mkdir -p "docs/plan/$task_slug"
-if ! (set -C; cat docs/plan/_template.md > "$target"); then
-  printf '无法创建 %s；若已存在，请继续已有任务或使用新 slug。\n' "$target" >&2
+if ! (set -C; cat < "$source_template" > "$target"); then
+  printf 'Cannot create %s. If it exists, resume the existing task or choose a new slug.\n' "$target" >&2
   exit 1
 fi
 )
 ```
 
-需要 spec 的任务，再创建同名规格：
+For a task requiring a spec, create it under the same slug:
 
 ```bash
 (
 set -eu
 task_slug=refactor-import
+source_template=docs/spec/_template.md
 target="docs/spec/$task_slug/spec.md"
+if [ ! -f "$source_template" ] || [ ! -r "$source_template" ]; then
+  printf 'Template is not a readable file: %s. Run from the repository root.\n' "$source_template" >&2
+  exit 1
+fi
 mkdir -p "docs/spec/$task_slug"
-if ! (set -C; cat docs/spec/_template.md > "$target"); then
-  printf '无法创建 %s；若已存在，请继续已有任务或使用新 slug。\n' "$target" >&2
+if ! (set -C; cat < "$source_template" > "$target"); then
+  printf 'Cannot create %s. If it exists, resume the existing task or choose a new slug.\n' "$target" >&2
   exit 1
 fi
 )
 ```
 
-填写适用内容，删除空的可选章节。上述 plan 若关联 spec，来源链接使用 `../../spec/refactor-import/spec.md#验收标准`。任务步骤按实际需要命名，不要求预先创建所有目录或文档。
+The examples check the source before creating directories or targets and open it before redirecting output. Missing/unreadable sources and a wrong working directory leave no target behind. Existing files are never overwritten. A storage failure during writing may leave a partial new file: inspect it before explicitly removing it and retrying; the examples do not automatically delete files.
 
-## 项目入口与验证
+Fill applicable fields and omit empty optional sections. A plan linked to the spec above uses `../../spec/refactor-import/spec.md#acceptance-criteria` as its source. Name steps for the actual work; do not pre-create unused documents or directories.
 
-采用模板后尽早填写，避免每次会话重新探索环境与命令。目前包含工作流文档与标准库检查脚本，没有业务运行时或应用测试。在项目根目录运行：
+Maintenance: `script/check_workflow.py` expects these three Bash blocks, the example slug, target paths, and recovery messages. Update the checker together with changes to these examples. A shared creation command can be introduced later if repeated use justifies it.
+
+## Project entry points and verification
+
+Fill this in early to avoid rediscovering the environment each session. This repository contains workflow documents and a standard-library checker, with no application runtime or business tests. Run from the repository root:
 
 ```bash
 python3 script/check_workflow.py
 ```
 
-脚本检查当前 Markdown 内联本地链接、标题锚点、模板关键字段、版本与变更记录一致性及待办区域，并在临时目录执行 README 创建示例及重复执行保护检查。检查不联网、不修改项目文件，也不会执行或清理用户待办；规约语义仍需人工或 agent 审阅。
+The checker validates inline local Markdown links, heading anchors, template fields, version/changelog consistency, and inbox sections. It runs the README examples in temporary directories to test creation, existing-file protection, source failures, and recovery. It does not contact the network, modify project files, execute user tasks, or clear the inbox. Workflow semantics still require human or agent review.
 
-| 项目项 | 当前值 / 采用后填写 |
+| Item | Current value / replace when adopting |
 |---|---|
-| 项目目标 | 当前为工作流模板；采用后填写业务目标 |
-| 环境与安装 | 检查脚本需要 Python 3.8+ 与 Bash，无第三方包；采用后填写业务环境及安装命令 |
-| 运行入口 | 当前无应用；采用后填写启动命令及工作目录 |
-| 最小验证 | `python3 script/check_workflow.py`；采用后补充业务改动的相关检查命令 |
-| 完整验证及触发条件 | 工作流、模板或检查脚本修改时运行上述命令并走查受影响的规则场景；采用后填写业务完整测试/构建命令及触发条件 |
-| 外部依赖与耗时 | 本地文档检查无需外部服务；发布需 GitHub 访问及 Git 写权限。采用后标明慢检查、服务需求及预期耗时 |
-| 源码与测试位置 | 按技术栈填写；需入库的小型样例放在 `tests/fixtures/` |
-| 配置方式 | 本地环境配置默认忽略，提供不含凭据的 `.env.example` 或 `.env.<环境>.example` |
+| Project goal | Currently a workflow template; replace with the business goal |
+| Environment and installation | Python 3.8+ and Bash for checks, no third-party packages; add application requirements |
+| Run entry point | No application yet; add the start command and working directory |
+| Minimum verification | `python3 script/check_workflow.py`; add focused application checks |
+| Full verification and triggers | For workflow, template, or checker changes, run the command and review affected rule scenarios; add application test/build commands and triggers |
+| External dependencies and duration | Local document checks need no service; publishing requires GitHub access and Git write permission. Document slow checks, services, and expected duration |
+| Source and test locations | Choose for the stack; small versioned fixtures go in `tests/fixtures/` |
+| Configuration | Local environment files are ignored; provide credential-free `.env.example` or `.env.<environment>.example` |
 
-## 模板与示例
+Migration from 0.1.0: document headings and fields are now English, including `Pending`, `Latest result`, and `Source`. Update customized templates, section-based tooling, and heading links together with the checker. File paths, task statuses, and the check command are unchanged. Historical records are translated for readability; their measurements describe the original runs.
 
-下列任务记录仅展示本模板的历史工作，不能作为新项目的需求或操作授权。
+## Templates and examples
 
-- [spec 模板](docs/spec/_template.md)：需求、边界及可验证的验收项。
-- [plan 模板](docs/plan/_template.md)：目标、进度、验证及必要的接续信息。
-- 效率调整任务的 [spec](docs/spec/agent-efficiency/spec.md)、[实施计划](docs/plan/agent-efficiency/01-simplify-workflow.md) 与 [发布记录](docs/plan/agent-efficiency/02-publish-repository.md)：真实工作示例。
-- 早期模板调整的 [spec](docs/spec/workflow-template/spec.md) 与 [plan](docs/plan/workflow-template/01-update-workflow.md)：历史记录，部分流程已被当前规约替代。
-- [采用与验证修复记录](docs/plan/workflow-review/01-fix-adoption.md)：创建保护、检查脚本和采用说明的验证记录。
+Task records below describe this template's own history. They do not grant authorization or define requirements for a new project.
 
-## 目录
+- [Spec template](docs/spec/_template.md): requirements, boundaries, and verifiable acceptance criteria.
+- [Plan template](docs/plan/_template.md): goals, progress, verification, and useful handoff information.
+- Efficiency work: [spec](docs/spec/agent-efficiency/spec.md), [implementation plan](docs/plan/agent-efficiency/01-simplify-workflow.md), and [publication record](docs/plan/agent-efficiency/02-publish-repository.md).
+- Earlier template work: [spec](docs/spec/workflow-template/spec.md) and [plan](docs/plan/workflow-template/01-update-workflow.md), whose rules are partly superseded.
+- [Adoption and verification fixes](docs/plan/workflow-review/01-fix-adoption.md): creation protection, reusable checks, and adoption guidance.
 
-| 路径 | 用途 |
+## Layout
+
+| Path | Purpose |
 |---|---|
-| `VERSION`、`CHANGELOG.md` | 当前版本与交付变更 |
-| `docs/TODO.md` | 用户需求输入与最近处理结果 |
-| `docs/spec/`、`docs/plan/` | 规格、计划及模板 |
-| `data/`、`log/`、`output/`、`temp/` | 按需创建的本地工作数据，默认不入库 |
-| `script/` | 需要保留的辅助脚本 |
-| `tests/fixtures/`、`docs/deliverables/` | 按需创建的小型测试样例、交付文档 |
+| `VERSION`, `CHANGELOG.md` | Current version and delivered changes |
+| `docs/TODO.md` | User requests and the latest processing receipt |
+| `docs/spec/`, `docs/plan/` | Specs, plans, and templates |
+| `data/`, `log/`, `output/`, `temp/` | Local work data, created as needed and ignored by default |
+| `script/` | Retained helper scripts |
+| `tests/fixtures/`, `docs/deliverables/` | Small versioned fixtures and deliverable documents |
 
-业务源码与测试布局随技术栈确定，并更新上表。版本管理保留源码、依赖锁文件和必要记录；可再生成的数据与产物留在本地工作目录。
+Choose application source/test layouts for the stack and update the table above. Version source, dependency lockfiles, and necessary records; keep reproducible data and outputs in local work directories.

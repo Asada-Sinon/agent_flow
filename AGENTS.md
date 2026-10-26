@@ -1,64 +1,66 @@
-# flow — 通用工作规约
+# flow — Working conventions
 
-以完成并验证任务的总成本为优先，减少重复探索、无效读取和用户介入，同时保留必要的验收与接续信息。项目入口与命令见 [README.md](README.md)。
+Optimize the total cost of completing and verifying work. Avoid repeated investigation, unnecessary reading, and user interruptions while preserving acceptance evidence and useful handoff context. Project entry points and commands are in [README.md](README.md).
 
-## 开始任务
+## Starting a task
 
-开始任务时读取 [用户待办](docs/TODO.md)，再定位当前任务的相关代码、执行入口和未完成计划；仅在需要时读取关联 spec、历史记录和模板，不默认遍历所有文档。继续已有任务时，核对计划记录与文件现状。
+Read the [user inbox](docs/TODO.md), then locate relevant code, entry points, and unfinished plans. Read related specs, history, and templates only when needed; do not scan every document by default. When resuming, compare recorded progress with the actual files.
 
-按不确定性、影响和接续需求选择最轻的适用流程，不仅按文件数量或是否为新功能判断：
+Choose the lightest suitable workflow based on uncertainty, impact, and continuity needs, rather than file count or whether a feature is new:
 
-| 情况 | 流程 |
+| Situation | Workflow |
 |---|---|
-| 调查，或局部、明确且影响有限的修改 | 直接处理 → 相关验证 → 回复结果，无需文件计划 |
-| 多步骤、需要持久记录或可能跨会话的任务 | 简短 plan → 实现 → 验证并记录 |
-| 需求存在需澄清的重要歧义，或涉及重要接口、行为变化 | 解决关键问题 → spec + plan → 实现 → 验收 |
+| Investigation, or a clear local change with limited impact | Act → verify → report; no file plan required |
+| Multiple steps, persistent context, or work likely to span sessions | Short plan → implement → verify and record |
+| Important unresolved requirements or significant interface/behavior changes | Resolve key questions → spec + plan → implement → accept |
 
-代码、脚本、配置和文档均按上述标准判断。执行中发现复杂度或影响增加时再升级流程，不为简单修改补写形式化文档。
+Apply this classification to code, scripts, configuration, and documentation. Upgrade the workflow if complexity or impact grows; do not add paperwork to simple changes.
 
-只追问无法从现有上下文确定、且影响目标、范围或验收的关键问题；已有授权不重复确认。可自主决定的实现细节直接推进，影响后续工作的假设记入已有计划或最终回复。等待关键决定时继续不依赖该决定的工作。
+Ask only about unresolved decisions that affect goals, scope, or acceptance and cannot be determined from context. Do not reconfirm existing authorization. Decide routine implementation details independently; record consequential assumptions in an existing plan or final response. While awaiting a decision, continue independent work.
 
-调查可在 `temp/` 中编写和运行一次性诊断、复现脚本，无需单独计划；前提是不修改交付物，也不产生需要额外授权的副作用。决定将脚本保留为项目工具时，按正式改动处理。
+One-off diagnostic or reproduction scripts may be written and run in `temp/` without a separate plan, provided they do not modify deliverables or cause effects requiring additional authorization. If retained as project tools, treat them as normal project changes.
 
-## 待办入口
+## Task inbox
 
-- `docs/TODO.md` 的「待办」区是用户需求输入，不要求在对话中重复确认。开始会话任务或收到「处理待办」时读取；编辑文件本身不会触发后台执行。
-- 先处理当前对话请求，再按用户指定优先级或文件顺序处理待办；用户明确要求只调查、只做指定事项或暂停时，不扩展到其他待办。当前用户指令与文件冲突时以当前指令为准，必要时保留问题等待澄清。
-- 只处理真实条目，忽略使用示例、注释、最近处理结果及「暂不执行」备忘。明确需求按任务分级执行；关键歧义或仅有方向、无法确定目标的想法保留，写明待确认问题，并继续其他独立条目。
-- 开始处理时记住选中条目的原文与范围；有 plan 时记录来源和足以恢复的目标，恢复时核对记录及实际产物，避免重复执行已完成工作。
-- 完成并验证后先记录结果，再重新读取 TODO，只定点删除本轮完成、可唯一定位且原文未变的条目及其从属说明。不得整文件覆盖；失败、阻塞、部分完成、新增或被用户改写的条目保留。已被用户删除的条目不重新插回；无法判断时保留并说明。
-- 更新「最近处理结果」为日期、完成摘要、验证及剩余问题，有 plan 时附链接，只保留最近一轮回执。未完成条目旁可写简短状态或问题。空待办不修改文件，也不凭示例创建任务；取消项仅在用户明确要求移除时清理。
+- The `Pending` section of `docs/TODO.md` contains user requests; users need not repeat them in chat. Read it when starting work or asked to process the inbox. Editing the file does not start a background agent.
+- Handle the current chat request first, then pending requests in the user's priority order or file order. If the user limits work to investigation, named items, or a pause, do not expand into other tasks. Current user instructions take precedence over conflicting inbox text; retain unresolved questions when needed.
+- Ignore examples, comments, `Latest result`, and items marked `Do not execute`. Apply task classification to clear requests. Retain ideas with unresolved goals or acceptance conditions, record the question, and continue independent items. Users may write requests in their preferred language.
+- When a task is cancelled or replaced but retained, mark its inbox entry `Do not execute: cancelled`, with the reason and replacement link if available. Skip it until the user explicitly reactivates it. A cancelled plan must not leave its associated inbox entry looking runnable; update both records.
+- Skip user-checked `[x]` or `[X]` entries as user-marked completed records. This is not evidence that the agent verified them. Do not execute or remove these records unless the user explicitly requests that action.
+- Remember the selected entries' original text and boundaries. In a plan, record their source and enough context to resume. Check records and actual outputs before repeating work after an interruption.
+- After completing and verifying an item, record the result, reread TODO, and remove only that item's uniquely identifiable, unchanged text and subordinate notes. Do not replace the entire file. Retain failed, blocked, partially completed, newly added, or user-edited entries. Do not restore entries the user deleted. When uncertain, keep the entry and explain.
+- Replace `Latest result` with the date, completion summary, verification, and remaining issues; link an existing plan when available. Keep only the latest receipt. Add brief status/questions beside unfinished entries as needed. Leave an empty inbox unchanged and never turn examples into tasks. Remove cancelled records only on explicit user request.
 
-## 版本管理
+## Versioning
 
-- 根目录 `VERSION` 是唯一版本号来源，使用不带 `v` 的 `主版本.次版本.修订号`，从 `0.1.0` 开始；[CHANGELOG.md](CHANGELOG.md) 记录对应版本、日期和交付变化。
-- 不兼容的接口、目录或工作流约定变化升主版本并将后两位归零；兼容的新功能或入口升次版本并将修订号归零；修复、兼容性改进及影响使用说明的更正升修订号。例如 `0.1.0 → 1.0.0 / 0.2.0 / 0.1.1`。
-- 同一批交付按最高变化级别只升级一次，不按文件数、提交数或待办数量升级。只更新计划进度、待办回执、发布证据或排版且不改变使用方式时，不升级。
-- 在交付时同步更新 VERSION 与 CHANGELOG，验证二者一致。Git 提交号与版本号分别用于定位提交和说明交付；后续如需发布标签，使用 `v<版本号>`，不自动创建标签或 GitHub Release。
+- Root `VERSION` is the single version source: `MAJOR.MINOR.PATCH`, without a `v` prefix. Versioning began at `0.1.0`; [CHANGELOG.md](CHANGELOG.md) records each version, date, and delivered changes.
+- Incompatible interface, directory, or workflow conventions increment MAJOR and reset the other numbers. Compatible features or entry points increment MINOR and reset PATCH. Fixes, compatible improvements, and corrections affecting usage increment PATCH. For example: `0.1.0 → 1.0.0 / 0.2.0 / 0.1.1`.
+- Increment once per delivery batch using its highest-impact change, not once per file, commit, or inbox item. Progress notes, inbox receipts, publication evidence, and formatting that does not change usage do not increment the version.
+- Update VERSION and CHANGELOG together at delivery and verify consistency. Commit IDs identify revisions; versions describe deliveries. If a release tag is requested, use `v<version>`. Do not create tags or GitHub Releases automatically.
 
-## 计划与执行
+## Planning and execution
 
-- spec：`docs/spec/<slug>/spec.md`，参考 [spec 模板](docs/spec/_template.md)。保留目标、范围、非目标和编号验收项；影响实现的约束、假设及未决问题按需记录。
-- plan：`docs/plan/<slug>/NN-<step>.md`，参考 [plan 模板](docs/plan/_template.md)。slug 使用短横线，NN 从 01 起；同一任务的 spec 与 plan 使用相同 slug。
-- 一个 plan 对应可独立验证的产出，不强行拆分。无 spec 时记录用户请求及可验证目标；有 spec 时链接并引用 `AC-01` 等验收编号，避免复制需求全文。
-- plan 默认保留目标与验收、状态、步骤和验证结果。阻塞、重要决策、接续信息按需添加，无内容的可选章节直接省略。
+- Specs: `docs/spec/<slug>/spec.md`, using the [spec template](docs/spec/_template.md). Keep the goal, scope, non-goals, and numbered acceptance criteria. Record relevant constraints, assumptions, and open questions as needed.
+- Plans: `docs/plan/<slug>/NN-<step>.md`, using the [plan template](docs/plan/_template.md). Use hyphenated slugs and numbering from 01; related specs and plans share a slug.
+- One plan should produce an independently verifiable result; do not split artificially. Without a spec, record the user request and a verifiable goal. With a spec, link it and reference IDs such as `AC-01` instead of copying requirements.
+- Default plan content: goal and acceptance, status, steps, and verification results. Add blockers, decisions, or handoff information only when useful; omit empty optional sections.
 
-在已授权目标和约束内自主调整实现。常规调试无需逐次记录；影响后续步骤或交接的重要变化，在阶段完成、切换任务或结束会话时更新计划。尚未授权的需求范围、兼容性、成本或数据处理方式变化，先说明影响并确认，再同步相关 spec 和 plan。
+Adjust implementation independently within authorized goals and constraints. Do not log every debugging attempt. Record changes that affect later steps or handoff at milestones, task switches, or session end. Before unauthorized changes to scope, compatibility, cost, or data handling, explain the impact and obtain the required decision, then update the relevant spec and plan.
 
-有计划的任务完成有价值的阶段后，保存进度与下一步，不只依赖中断前记录。需要接续时优先留下相关文件入口、已排除方案及原因、下一条可执行命令，避免流水账。
+Save progress and the next action after useful milestones, not only before interruption. For handoff, prioritize file entry points, rejected approaches and reasons, and the next executable command over a chronological activity log.
 
-状态：`pending` 尚未开始；`in-progress` 正在执行，普通中断不改为阻塞；`blocked` 依赖外部条件或未决问题，写明原因、解除条件和下一步；`done` 对应验收全部通过且留有真实证据；`cancelled` 表示任务已取消或被替代，记录原因及替代任务（如有），不代表验收通过。恢复时核对实际文件，阻塞解除后改回 `in-progress`。
+Statuses: `pending` means not started; `in-progress` means underway, including ordinary interruptions; `blocked` requires an external dependency or unresolved question, with the cause, unblock condition, and next step; `done` requires all relevant acceptance criteria to pass with real evidence; `cancelled` means cancelled or superseded, with a reason and replacement task if any, not successful acceptance. On resumption, check the files and return unblocked work to `in-progress`.
 
-## 验证与留痕
+## Verification and evidence
 
-- 重要接口、兼容性或数据迁移变化可按风险安排独立审查，对照验收条件检查 diff 和证据；不作为所有任务的强制阶段。
-- 从与改动直接相关的最小验证开始，按影响范围和项目约定决定是否执行完整测试或构建；不为低影响修改机械添加测试。
-- 验证通过且没有新增改动、失败或疑点时，不重复运行相同检查。检查入口、完整验证触发条件和外部依赖见 README。
-- 记录实际执行的关键命令或可复核观察、结果及剩余问题。失败或未执行的验证如实说明，未满足验收不得标记 done。
-- 有 plan 时结果直接写回；无 plan 时在最终回复说明改动、验证及剩余问题。无需复制日志快照、记录所有操作或署名模型。
+- Significant interface, compatibility, or data migration changes may warrant an independent review of the diff and acceptance evidence. This is not a mandatory stage for every task.
+- Start with the smallest relevant verification. Expand to full tests or builds according to impact and project requirements; do not mechanically add tests for low-impact edits.
+- Do not rerun passing checks without new changes, failures, or concerns. Commands, full-check triggers, and external dependencies are documented in README.
+- Record key commands or reproducible observations, actual results, and remaining issues. Disclose failed or unrun verification; do not mark unmet acceptance as done.
+- Write results into an existing plan, or report changes, verification, and remaining issues in the final response when no plan is needed. Do not copy log snapshots, record every action, or add model signatures.
 
-## 目录约定
+## Directories
 
-- `data/`、`log/`、`output/`、`temp/` 存放本地数据、日志、生成产物和临时文件，默认不入库，按需创建。
-- 需入库的小型测试样例放在 `tests/fixtures/`，交付文档放在 `docs/deliverables/`。
-- 需入库的辅助脚本放在 `script/`，使用 `<verb>_<object>.*` 命名；其余源码、测试布局和项目命令写入 README。
+- `data/`, `log/`, `output/`, and `temp/` contain local data, logs, generated outputs, and temporary files. Create them as needed; they are ignored by default.
+- Small versioned fixtures belong in `tests/fixtures/`; deliverable documents belong in `docs/deliverables/`.
+- Retained helper scripts belong in `script/`, named `<verb>_<object>.*`. Document other source/test layouts and project commands in README.

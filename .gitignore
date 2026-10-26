@@ -1,16 +1,16 @@
-# 根目录的本地工作数据；测试样例和交付文档放在需入库的位置
+# Root-level local work data; version fixtures and deliverables elsewhere
 /data/
 /log/
 /output/
 /temp/
 
-# 本地环境配置；保留不含凭据的配置示例
+# Local environment configuration; keep credential-free examples
 .env
 .env.*
 !.env.example
 !.env.*.example
 
-# 常见依赖目录和缓存；构建产物规则随项目技术栈补充
+# Common dependencies and caches; add stack-specific build outputs as needed
 node_modules/
 .venv/
 venv/
@@ -21,6 +21,6 @@ __pycache__/
 .mypy_cache/
 .cache/
 
-# 系统杂项
+# Operating-system files
 .DS_Store
 Thumbs.db

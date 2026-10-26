@@ -1,10 +1,18 @@
-# 变更记录
+# Changelog
 
-版本号以 [VERSION](VERSION) 为准，升级规则见 [版本管理](AGENTS.md#版本管理)。只记录交付变化，任务过程保留在对应 plan；引入版本号之前的历史不追补版本。
+[VERSION](VERSION) is the version source; see [Versioning](AGENTS.md#versioning) for increment rules. Record delivered changes here and task details in plans. Releases before versioning was introduced are not backfilled.
+
+## 1.0.0 — 2026-10-26
+
+- Translate maintained documents, templates, historical records, comments, and checker expectations into English.
+- Breaking document convention change: template fields, inbox sections, and heading links now use English. Update customized templates and heading-based tooling; paths, status values, and the check command remain unchanged.
+- Check template sources before creating targets; missing/unreadable sources and wrong-directory attempts leave no target, and corrected attempts can be retried.
+- Keep retained cancelled/replaced tasks inactive until explicitly reactivated; skip user-checked items without treating them as agent-verified.
+- Expand source-failure regression checks and document the README/checker coupling.
 
 ## 0.1.0 — 2026-10-26
 
-- 首次建立主版本、次版本、修订号规则和统一版本文件。
-- 新增 [用户待办入口](docs/TODO.md)，支持会话中读取需求、验证后清理完成项及保留最近结果。
-- 明确待办与当前对话的优先关系，以及未完成、被改写条目的保留规则。
-- 检查脚本增加版本、变更记录一致性与待办区域检查。
+- Establish major/minor/patch rules and a single version file.
+- Add the [user inbox](docs/TODO.md) for requests processed during sessions, verified completion cleanup, and a latest-result receipt.
+- Define priority between inbox requests and the current conversation, preserving unfinished and edited items.
+- Add version/changelog consistency and inbox-section checks.
