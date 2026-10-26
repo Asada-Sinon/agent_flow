@@ -6,6 +6,7 @@ this is not a general Markdown parser. README creation examples run in a
 throwaway directory, so review changes to those commands before running.
 """
 
+from datetime import date
 from pathlib import Path
 import re
 import shutil
@@ -81,6 +82,29 @@ def check_templates():
     print("Templates: PASS (required fields and 5 statuses)")
 
 
+def check_version_and_inbox():
+    version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
+    version_pattern = r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)"
+    require(re.fullmatch(version_pattern, version), "VERSION must use major.minor.patch without leading zeros")
+    changelog = prose((ROOT / "CHANGELOG.md").read_text(encoding="utf-8"))
+    headings = re.findall(r"^## (.+)$", changelog, re.M)
+    require(headings, "CHANGELOG.md must contain a version and date heading")
+    releases = []
+    for heading in headings:
+        release = re.fullmatch(r"(" + version_pattern + r") — ([0-9]{4}-[0-9]{2}-[0-9]{2})", heading)
+        require(release, f"Invalid CHANGELOG release heading: {heading}")
+        date.fromisoformat(release.group(2))
+        releases.append(release.group(1))
+    require(releases[0] == version, "VERSION must match the latest CHANGELOG entry")
+    require(len(releases) == len(set(releases)), "Duplicate version in CHANGELOG.md")
+    inbox = prose((ROOT / "docs/TODO.md").read_text(encoding="utf-8"))
+    sections = re.findall(r"^## (.+)$", inbox, re.M)
+    for section in ("待办", "最近处理结果"):
+        require(sections.count(section) == 1, f"docs/TODO.md must contain one {section} section")
+    require(sections.index("待办") < sections.index("最近处理结果"), "TODO results must follow pending tasks")
+    print(f"Version and inbox: PASS ({version}; changelog aligned; TODO sections present)")
+
+
 def run_example(block, workspace):
     return subprocess.run(
         ["bash", "-eu", "-c", block], cwd=workspace,
@@ -129,6 +153,7 @@ def main():
     try:
         check_documents()
         check_templates()
+        check_version_and_inbox()
         check_examples()
     except (ValueError, OSError, subprocess.TimeoutExpired) as error:
         print(f"FAIL: {error}", file=sys.stderr)
